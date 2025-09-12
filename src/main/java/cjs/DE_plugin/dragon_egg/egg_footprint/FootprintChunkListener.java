@@ -14,7 +14,7 @@ public class FootprintChunkListener implements Listener {
 
     @EventHandler
     public void onChunkLoad(ChunkLoadEvent event) {
-        // 청크가 로드될 때, 해당 청크 내의 만료된 발자국을 확인하고 제거합니다.
-        footprintManager.checkAndRemoveExpiredFootprintsInChunk(event.getChunk());
+        // 발자국 만료 확인 로직은 GameTimeManager에서 주기적으로 처리하므로,
+        // 청크 로드 시 별도의 작업이 필요하지 않습니다.
     }
 }

@@ -11,14 +11,14 @@ public class Footprint {
     private final UUID backEntityId;
     private final UUID ownerId;
     private final Location location;
-    private final long creationTime;
+    private final long creationDay;
 
-    public Footprint(UUID frontEntityId, UUID backEntityId, UUID ownerId, Location location, long creationTime) {
+    public Footprint(UUID frontEntityId, UUID backEntityId, UUID ownerId, Location location, long creationDay) {
         this.frontEntityId = frontEntityId;
         this.backEntityId = backEntityId;
         this.ownerId = ownerId;
         this.location = location;
-        this.creationTime = creationTime; // 불러온 생성 시간을 적용
+        this.creationDay = creationDay;
     }
 
     public UUID getFrontEntityId() {
@@ -37,7 +37,7 @@ public class Footprint {
         return location;
     }
 
-    public long getCreationTime() {
-        return creationTime;
+    public long getCreationDay() {
+        return creationDay;
     }
 }

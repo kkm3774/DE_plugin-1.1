@@ -18,9 +18,10 @@ public class SettingsManager {
     public static final String HIDE_ADVANCEMENTS = "world-rules.hide-advancements";
     public static final String HIDE_COORDINATES = "world-rules.hide-coordinates";
     public static final String HIDE_FOOTPRINTS_AT_NIGHT = "world-rules.hide-footprints-at-night";
+    public static final String POTION_LIMIT = "potion-limit";
+    // [신규] 경험치 배율 설정
     public static final String PLAYER_EXP_DROP_MULTIPLIER = "player-exp-drop-multiplier";
-    public static final String POTION_LIMIT = "potion-limit"; // [수정] 드래곤 경험치 설정 키 이름 변경
-    public static final String RESPAWNED_DRAGON_EXP_LEVEL = "respawned-dragon-exp-level";
+    public static final String RESPAWNED_DRAGON_EXP_MULTIPLIER = "respawned-dragon-exp-multiplier";
     public static final String EGG_FOOTPRINT_DURATION_DAYS = "dragon-egg-footprint-duration-days";
     public static final String GAME_PLAY_TIME_DAYS = "game-play-time-days";
     public static final String WORLDBORDER_OVERWORLD_SIZE = "worldborder.overworld-size";
@@ -61,9 +62,10 @@ public class SettingsManager {
         config.addDefault(HIDE_ADVANCEMENTS, true);
         config.addDefault(HIDE_COORDINATES, true);
         config.addDefault(HIDE_FOOTPRINTS_AT_NIGHT, true);
-        config.addDefault(PLAYER_EXP_DROP_MULTIPLIER, 1.0); // 100%
         config.addDefault(POTION_LIMIT, 2);
-        config.addDefault(RESPAWNED_DRAGON_EXP_LEVEL, 30); // [수정] 부활 드래곤 처치 시 획득할 경험치 '레벨'
+        // [신규] 경험치 배율 설정 기본값
+        config.addDefault(PLAYER_EXP_DROP_MULTIPLIER, 1.0); // 100%
+        config.addDefault(RESPAWNED_DRAGON_EXP_MULTIPLIER, 0.7); // 70%
         config.addDefault(EGG_FOOTPRINT_DURATION_DAYS, 5);
         config.addDefault(GAME_PLAY_TIME_DAYS, 100);
         config.addDefault(WORLDBORDER_OVERWORLD_SIZE, 1000);

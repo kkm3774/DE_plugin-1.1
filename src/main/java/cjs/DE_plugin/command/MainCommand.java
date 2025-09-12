@@ -25,10 +25,10 @@ public class MainCommand implements CommandExecutor {
     private static final List<String> GENERAL_SETTINGS_KEYS = Arrays.asList(
             SettingsManager.VILLAGER_TRADE_LIMIT,
             SettingsManager.POTION_LIMIT,
-            SettingsManager.RESPAWNED_DRAGON_EXP_LEVEL,
+            SettingsManager.PLAYER_EXP_DROP_MULTIPLIER,
+            SettingsManager.RESPAWNED_DRAGON_EXP_MULTIPLIER,
             SettingsManager.GAME_PLAY_TIME_DAYS,
             SettingsManager.EXPLOSION_DAMAGE_MULTIPLIER,
-            SettingsManager.PLAYER_EXP_DROP_MULTIPLIER,
             SettingsManager.ENDER_PEARL_BANNED,
             SettingsManager.ENDER_CHEST_BANNED,
             SettingsManager.SHIELD_BANNED,

@@ -38,6 +38,8 @@ public class GameTimeManager implements Listener {
 
     private BukkitTask timerTask;
 
+    private long lastDayCheckedForExpiration = -1;
+
     // 조종 가능한 드래곤과 그 제어 태스크를 관리합니다.
     private final Map<UUID, BukkitTask> dragonControlTasks = new HashMap<>();
     private final Set<UUID> specialDragonIds = new HashSet<>();
@@ -117,6 +119,7 @@ public class GameTimeManager implements Listener {
         this.isRunning = true;
         this.startTick = Bukkit.getWorlds().get(0).getFullTime();
         long gameDays = sm.getInt(SettingsManager.GAME_PLAY_TIME_DAYS);
+        this.lastDayCheckedForExpiration = mainWorld.getFullTime() / 24000L;
         this.gameEndTick = gameDays * 24000L;
 
         save();
@@ -243,6 +246,13 @@ public class GameTimeManager implements Listener {
 
             long now = mainWorld.getFullTime();
 
+            // [핵심 변경] 날짜가 바뀔 때마다 만료된 발자국을 확인하고 제거합니다.
+            long currentDay = now / 24000L;
+            if (isRunning && currentDay > lastDayCheckedForExpiration) {
+                plugin.getFootprintManager().removeExpiredFootprints(currentDay);
+                lastDayCheckedForExpiration = currentDay;
+            }
+
             if (now >= gameEndTick) {
                 endGame();
                 this.cancel();
@@ -265,8 +275,6 @@ public class GameTimeManager implements Listener {
                     player.playSound(player.getLocation(), Sound.ENTITY_WARDEN_HEARTBEAT, volume, pitch);
                 }
             } else {
-                long currentDay = now / 24000L;
-
                 actionBarComponent = Component.text(String.format("§fDay %d", currentDay));
                 for (Player player : Bukkit.getOnlinePlayers()) {
                     player.sendActionBar(actionBarComponent);

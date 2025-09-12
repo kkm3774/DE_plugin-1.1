@@ -62,9 +62,9 @@ public class FootprintManager {
                 UUID frontId = UUID.fromString(section.getString(key + ".front"));
                 UUID backId = UUID.fromString(section.getString(key + ".back"));
                 UUID ownerId = UUID.fromString(section.getString(key + ".owner"));
-                long creationTime = section.getLong(key + ".time");
+                long creationDay = section.getLong(key + ".day", section.getLong(key + ".time", 0)); // 호환성을 위해 .time도 읽음
 
-                Footprint footprint = new Footprint(frontId, backId, ownerId, location, creationTime);
+                Footprint footprint = new Footprint(frontId, backId, ownerId, location, creationDay);
                 addFootprintToMap(footprint);
 
             } catch (Exception e) {
@@ -122,7 +122,7 @@ public class FootprintManager {
             newConfig.set(path + ".back", fp.getBackEntityId().toString());
             newConfig.set(path + ".owner", fp.getOwnerId().toString());
             newConfig.set(path + ".location", fp.getLocation());
-            newConfig.set(path + ".time", fp.getCreationTime());
+            newConfig.set(path + ".day", fp.getCreationDay());
             i++;
         }
         try {
@@ -257,20 +257,35 @@ public class FootprintManager {
         }
         return worldFootprints.getOrDefault(getChunkKey(chunk), Collections.emptySet());
     }
+    
+    /**
+     * [신규] 만료된 모든 발자국을 찾아 제거합니다. 비동기적으로 실행되어 서버 부하를 줄입니다.
+     * @param currentDay 현재 게임 내 일차
+     */
+    public void removeExpiredFootprints(long currentDay) {
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                long durationDays = sm.getInt(SettingsManager.EGG_FOOTPRINT_DURATION_DAYS);
+                if (durationDays <= 0) return; // 기간 설정이 0 이하면 제거하지 않음
 
-    public void checkAndRemoveExpiredFootprintsInChunk(Chunk chunk) {
-        long durationDays = sm.getInt(SettingsManager.EGG_FOOTPRINT_DURATION_DAYS);
-        long durationMs = durationDays * 20L * 60L * 1000L;
+                List<Footprint> toRemove = new ArrayList<>();
+                // getAllFootprints()는 매번 스트림을 생성하므로, 직접 순회하여 부하를 줄입니다.
+                for (Map<Long, Set<Footprint>> worldMap : footprintsByChunk.values()) {
+                    for (Set<Footprint> chunkSet : worldMap.values()) {
+                        for (Footprint fp : chunkSet) {
+                            if (currentDay - fp.getCreationDay() >= durationDays) {
+                                toRemove.add(fp);
+                            }
+                        }
+                    }
+                }
 
-        Set<Footprint> toCheck = getFootprintsInChunk(chunk);
-        if (toCheck.isEmpty()) return;
-
-        List<Footprint> toRemove = toCheck.stream()
-                .filter(fp -> System.currentTimeMillis() - fp.getCreationTime() > durationMs)
-                .collect(Collectors.toList());
-
-        if (!toRemove.isEmpty()) {
-            toRemove.forEach(this::removeFootprint);
-        }
+                if (!toRemove.isEmpty()) {
+                    plugin.getLogger().info("Removing " + toRemove.size() + " expired footprints...");
+                    toRemove.forEach(FootprintManager.this::removeFootprint);
+                }
+            }
+        }.runTaskAsynchronously(plugin);
     }
 }

@@ -207,7 +207,8 @@ public class FootprintTask extends BukkitRunnable {
 
         // 생성된 발자국 정보를 Manager에 등록합니다.
         Location actualFootprintLocation = from.clone().add(0, 0.01, 0);
-        Footprint footprint = new Footprint(frontDisplay.getUniqueId(), backDisplay.getUniqueId(), ownerId, actualFootprintLocation, System.currentTimeMillis());
+        long creationDay = from.getWorld().getFullTime() / 24000L;
+        Footprint footprint = new Footprint(frontDisplay.getUniqueId(), backDisplay.getUniqueId(), ownerId, actualFootprintLocation, creationDay);
         footprintManager.addFootprint(footprint);
     }
     /**

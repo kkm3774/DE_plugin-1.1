@@ -61,13 +61,13 @@ public class SettingsEditorUI {
         // 숫자 설정
         sendNumberSetting(player, "주민 거래 제한", SettingsManager.VILLAGER_TRADE_LIMIT, 1);
         sendNumberSetting(player, "포션 최대 소지 수", SettingsManager.POTION_LIMIT, 1);
-        sendNumberSetting(player, "부활 드래곤 경험치(Lv)", SettingsManager.RESPAWNED_DRAGON_EXP_LEVEL, 5);
         sendNumberSetting(player, "황금사과 재생 시간(초)", SettingsManager.GOLDEN_APPLE_REGEN_DURATION_SECONDS, 1);
         sendNumberSetting(player, "게임 플레이 타임(일)", SettingsManager.GAME_PLAY_TIME_DAYS, 1);
 
         // 비율(소수) 설정
         sendDecimalSetting(player, "폭발 데미지 비율", SettingsManager.EXPLOSION_DAMAGE_MULTIPLIER, 0.05);
         sendDecimalSetting(player, "플레이어 경험치 드롭율", SettingsManager.PLAYER_EXP_DROP_MULTIPLIER, 0.1);
+        sendDecimalSetting(player, "부활 드래곤 경험치율", SettingsManager.RESPAWNED_DRAGON_EXP_MULTIPLIER, 0.1);
 
         // ON/OFF 설정
         sendBooleanSetting(player, "엔더 진주 금지", SettingsManager.ENDER_PEARL_BANNED);
